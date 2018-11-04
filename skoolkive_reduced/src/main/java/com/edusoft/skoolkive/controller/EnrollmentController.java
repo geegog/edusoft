@@ -1,8 +1,5 @@
 package com.edusoft.skoolkive.controller;
 
-import com.edusoft.skoolkive.entities.*;
-import com.edusoft.skoolkive.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.edusoft.skoolkive.pojo.EnrollmentDto;
 
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 
 /**
  * @author onuche
@@ -25,6 +21,8 @@ public class EnrollmentController {
         session.setAttribute("administrator_id_session",1);
         try {
             if (session.getAttribute("administrator_id_session") != null) {
+
+                if (form.getClass_id() == null) return ResponseEntity.badRequest().build();
 
             } else if (session.getAttribute("administrator_id_session") == null) {
 
