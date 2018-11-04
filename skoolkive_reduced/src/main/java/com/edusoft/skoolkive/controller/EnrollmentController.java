@@ -17,17 +17,10 @@ import javax.servlet.http.HttpSession;
 public class EnrollmentController {
 
     @PostMapping("api/enroll")
-    public ResponseEntity<String> enrollmentStudents(@RequestBody EnrollmentDto form, HttpSession session) {
-        session.setAttribute("administrator_id_session",1);
+    public ResponseEntity<String> enrollmentStudents(@RequestBody EnrollmentDto form) {
         try {
-            if (session.getAttribute("administrator_id_session") != null) {
-
-                if (form.getClass_id() == null) return ResponseEntity.badRequest().build();
-
-            } else if (session.getAttribute("administrator_id_session") == null) {
-
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
+            //testEnrollStudentNoClassSupplied
+            if (form.getClass_id() == null) return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
