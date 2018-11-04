@@ -49,7 +49,6 @@ public class EnrollmentController {
 
             //testEnrollStudentNoStudentsSupplied
             if (form.getStudents() == null) return ResponseEntity.badRequest().build();
-        try {
 
             Long[] student_id = form.getStudents();
             Long[] course_id = form.getCourses();
@@ -69,18 +68,9 @@ public class EnrollmentController {
                     Enrollment enrollment = new Enrollment();
                     Course course = courseRepository.findById(Long.valueOf(course_id[j])).orElse(null);
 
-                    if (class_ == null) {
-                        return ResponseEntity.badRequest().build();
-                    }
                     enrollment.setClass_(class_);
                     enrollment.setDateT(new Date());
-                    if (student == null) {
-                        continue;
-                    }
                     enrollment.setStudent(student);
-                    if (course == null) {
-                        continue;
-                    }
                     enrollment.setCourse(course);
 
                     try {
@@ -108,10 +98,6 @@ public class EnrollmentController {
                 }
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
         return ResponseEntity.ok("Enrolled!!!");
     }
 
