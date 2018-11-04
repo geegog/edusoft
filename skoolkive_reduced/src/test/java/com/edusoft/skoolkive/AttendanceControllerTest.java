@@ -26,4 +26,26 @@ public class AttendanceControllerTest {
     @Before
     public void setUp() {
     }
+
+    private HttpEntity<Object> getHttpEntity(Object body) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(body, headers);
+    }
+
+    @Test
+    public void testAttendanceSuccessful() throws Exception {
+        HttpEntity<Object> attendance = getHttpEntity(
+                "{\n" +
+                        "  \"students\": [1,2],\n" +
+                        "  \"class_id\": 1,\n" +
+                        "  \"status\": [\"LATE\",\"EXCUSED\"]\n"+
+                        "}");
+
+        ResponseEntity<String> response =
+                template.postForEntity(
+                        "/api/take/attendance", attendance, String.class);
+
+        Assert.assertEquals(200, response.getStatusCode().value());
+    }
 }
