@@ -64,7 +64,7 @@ public class EnrollmentControllerTest {
     public void testEnrollStudentNoCoursesSupplied() throws Exception {
         HttpEntity<Object> enroll = getHttpEntity(
                 "{\n" +
-                        "  \"courses\": [1,2,3,4,5],\n" +
+                        "  \"students\": [1,2],\n" +
                         "  \"class_id\": 1\n" +
                         "}");
 
