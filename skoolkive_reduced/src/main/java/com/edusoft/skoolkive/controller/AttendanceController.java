@@ -40,9 +40,14 @@ public class AttendanceController {
                 Long[] student_id = form.getStudents();
                 Long classId = form.getClass_id();
 
+                if (form.getStudents() == null)
+                    return ResponseEntity.badRequest().build();
+
                 if (form.getStatus() == null)
                     return ResponseEntity.badRequest().build();
 
+                if(student_id.length<=0)
+                    return ResponseEntity.badRequest().build();
 
 
                 for (int i = 0; i < student_id.length; i++) {
