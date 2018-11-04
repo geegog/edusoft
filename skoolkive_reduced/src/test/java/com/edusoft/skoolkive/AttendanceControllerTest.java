@@ -112,7 +112,6 @@ public class AttendanceControllerTest {
     public void testAttendanceWithStudentNull() throws Exception {
         HttpEntity<Object> attendanceObjectHttpEntity = getHttpEntity(
                 "{\n" +
-                        
                         "  \"class_id\": 1\n" +
                         "}");
 
