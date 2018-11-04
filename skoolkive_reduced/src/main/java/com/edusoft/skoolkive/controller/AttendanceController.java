@@ -73,7 +73,8 @@ public class AttendanceController {
                 }
                 return ResponseEntity.ok("Attendance has been recorded successful...");
             } catch (Exception e){
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>
+                        (HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
