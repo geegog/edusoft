@@ -36,9 +36,8 @@ public class AttendanceController {
         public ResponseEntity<String> recordAttendance(@RequestBody AttendanceDto form, HttpSession session){
             try {
 
-                String[] status = form.getStatus();
-                Long[] student_id = form.getStudents();
-                Long classId = form.getClass_id();
+                if (form.getClass_id() == null)
+                    return ResponseEntity.badRequest().build();
 
                 if (form.getStudents() == null)
                     return ResponseEntity.badRequest().build();
@@ -46,9 +45,15 @@ public class AttendanceController {
                 if (form.getStatus() == null)
                     return ResponseEntity.badRequest().build();
 
+
+
+                String[] status = form.getStatus();
+                Long[] student_id = form.getStudents();
+                Long classId = form.getClass_id();
+
+
                 if(student_id.length<=0)
                     return ResponseEntity.badRequest().build();
-
 
                 for (int i = 0; i < student_id.length; i++) {
 
