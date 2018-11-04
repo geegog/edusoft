@@ -24,6 +24,9 @@ public class EnrollmentController {
 
             //testEnrollStudentNoCoursesSupplied
             if (form.getCourses() == null) return ResponseEntity.badRequest().build();
+
+            //testEnrollStudentNoStudentsSupplied
+            if (form.getStudents() == null) return ResponseEntity.badRequest().build();
         try {
         } catch (Exception e) {
             e.printStackTrace();
