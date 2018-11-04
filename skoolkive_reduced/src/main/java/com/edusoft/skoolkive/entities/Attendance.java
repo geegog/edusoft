@@ -16,7 +16,7 @@ import java.util.Date;
  * @author onuche
  */
 @Entity
-@Table(name = "Attendance", uniqueConstraints = {@UniqueConstraint(columnNames = {"student", "dateT"})})
+@Table(name = "Attendance", uniqueConstraints = {@UniqueConstraint(columnNames = {"student", "dateT","class_"})})
 public class Attendance extends PersistentBase {
 
     private Status status;
