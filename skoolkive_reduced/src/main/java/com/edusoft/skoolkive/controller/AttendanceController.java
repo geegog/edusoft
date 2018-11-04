@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Mahdad-PC on 11/4/2018.
@@ -52,8 +54,6 @@ public class AttendanceController {
                 Long classId = form.getClass_id();
 
 
-                if(student_id.length<=0)
-                    return ResponseEntity.badRequest().build();
 
                 for (int i = 0; i < student_id.length; i++) {
 
@@ -68,6 +68,16 @@ public class AttendanceController {
                     attendance.setStatus(Status.valueOf(status[i]));
                     attendance.setClass_(class_);
                     attendance.setDateT(new Date());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+                    List<Attendance> attendanceList = attendanceRepository.findAll();
+                    for(Attendance savedAttendance : attendanceList) {
+                        if(savedAttendance.getStudent().equals(attendance.getStudent()) &&
+                                savedAttendance.getClass_().equals(attendance.getClass_()) && (
+                                sdf.parse(sdf.format(attendance.getDateT())).equals(savedAttendance.getDateT()))){
+                            return ResponseEntity.ok("Attendance exist you should go for update it");
+                        }
+                    }
 
                     attendanceRepository.save(attendance);
                 }
