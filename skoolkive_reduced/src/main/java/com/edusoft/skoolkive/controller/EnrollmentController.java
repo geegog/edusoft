@@ -49,6 +49,7 @@ public class EnrollmentController {
 
             //testEnrollStudentNoStudentsSupplied
             if (form.getStudents() == null) return ResponseEntity.badRequest().build();
+        try {
 
             Long[] student_id = form.getStudents();
             Long[] course_id = form.getCourses();
@@ -57,16 +58,16 @@ public class EnrollmentController {
             String[] type = {"Affective", "Affective", "Affective", "Affective", "Psychomotor", "Psychomotor", "Psychomotor",
                     "Psychomotor"};
 
-            Class_ class_ = classRepository.findById(form.getClass_id()).orElse(null);
+            Class_ class_ = classRepository.findById(form.getClass_id()).get();
 
             for (int i = 0; i < student_id.length; i++) {
 
-                Student student = studentRepository.findById(student_id[i]).orElse(null);
+                Student student = studentRepository.findById(student_id[i]).get();
 
                 for (int j = 0; j < course_id.length; j++) {
 
                     Enrollment enrollment = new Enrollment();
-                    Course course = courseRepository.findById(Long.valueOf(course_id[j])).orElse(null);
+                    Course course = courseRepository.findById(Long.valueOf(course_id[j])).get();
 
                     enrollment.setClass_(class_);
                     enrollment.setDateT(new Date());
@@ -98,6 +99,9 @@ public class EnrollmentController {
                 }
             }
 
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return ResponseEntity.ok("Enrolled!!!");
     }
 
