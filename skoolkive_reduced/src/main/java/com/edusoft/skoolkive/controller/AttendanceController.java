@@ -54,8 +54,6 @@ public class AttendanceController {
                 Long classId = form.getClass_id();
 
 
-                if(student_id.length<=0)
-                    return ResponseEntity.badRequest().build();
 
                 for (int i = 0; i < student_id.length; i++) {
 
