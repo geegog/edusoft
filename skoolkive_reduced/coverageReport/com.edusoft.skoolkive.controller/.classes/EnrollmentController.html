@@ -1,0 +1,193 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: EnrollmentController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.edusoft.skoolkive.controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: EnrollmentController (com.edusoft.skoolkive.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EnrollmentController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.2%
+  </span>
+  <span class="absValue">
+    (35/ 36)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.edusoft.skoolkive.controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.edusoft.skoolkive.entities.*;
+<i>4</i>&nbsp;import com.edusoft.skoolkive.repository.*;
+<i>5</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>6</i>&nbsp;import org.springframework.http.HttpStatus;
+<i>7</i>&nbsp;import org.springframework.http.ResponseEntity;
+<i>8</i>&nbsp;import org.springframework.web.bind.annotation.PostMapping;
+<i>9</i>&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+<i>10</i>&nbsp;import org.springframework.web.bind.annotation.RestController;
+<i>11</i>&nbsp;import com.edusoft.skoolkive.pojo.EnrollmentDto;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import javax.servlet.http.HttpSession;
+<i>14</i>&nbsp;import java.util.Date;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;/**
+<i>17</i>&nbsp; * @author onuche
+<i>18</i>&nbsp; */
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;@RestController
+<b class="fc"><i>21</i>&nbsp;public class EnrollmentController {</b>
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    @Autowired
+<i>24</i>&nbsp;    StudentRepository studentRepository;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    @Autowired
+<i>27</i>&nbsp;    ClassRepository classRepository;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    @Autowired
+<i>30</i>&nbsp;    EnrollmentRepository enrollmentRepository;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    @Autowired
+<i>33</i>&nbsp;    AttendanceRepository attendanceRepository;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    @Autowired
+<i>36</i>&nbsp;    CourseRepository courseRepository;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    @Autowired
+<i>39</i>&nbsp;    AssessmentRepository assessmentRepository;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    @PostMapping(&quot;api/enroll&quot;)
+<i>42</i>&nbsp;    public ResponseEntity&lt;String&gt; enrollmentStudents(@RequestBody EnrollmentDto form) {
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;            //testEnrollStudentNoClassSupplied
+<b class="fc"><i>45</i>&nbsp;            if (form.getClass_id() == null) return ResponseEntity.badRequest().build();</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;            //testEnrollStudentNoCoursesSupplied
+<b class="fc"><i>48</i>&nbsp;            if (form.getCourses() == null) return ResponseEntity.badRequest().build();</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;            //testEnrollStudentNoStudentsSupplied
+<b class="fc"><i>51</i>&nbsp;            if (form.getStudents() == null) return ResponseEntity.badRequest().build();</b>
+<i>52</i>&nbsp;
+<b class="fc"><i>53</i>&nbsp;            Long[] student_id = form.getStudents();</b>
+<b class="fc"><i>54</i>&nbsp;            Long[] course_id = form.getCourses();</b>
+<b class="fc"><i>55</i>&nbsp;            String[] trait = {&quot;Attentiveness&quot;, &quot;Honesty&quot;, &quot;Neatness&quot;, &quot;Punctuality&quot;, &quot;Club/Society&quot;, &quot;Drawing and Painting&quot;,</b>
+<i>56</i>&nbsp;                    &quot;Hand Writing&quot;, &quot;Sports and Games&quot;};
+<b class="fc"><i>57</i>&nbsp;            String[] type = {&quot;Affective&quot;, &quot;Affective&quot;, &quot;Affective&quot;, &quot;Affective&quot;, &quot;Psychomotor&quot;, &quot;Psychomotor&quot;, &quot;Psychomotor&quot;,</b>
+<i>58</i>&nbsp;                    &quot;Psychomotor&quot;};
+<i>59</i>&nbsp;
+<b class="fc"><i>60</i>&nbsp;        Class_ class_ = classRepository.findById(form.getClass_id()).orElse(null);</b>
+<i>61</i>&nbsp;
+<b class="fc"><i>62</i>&nbsp;            for (int i = 0; i &lt; student_id.length; i++) {</b>
+<i>63</i>&nbsp;
+<b class="fc"><i>64</i>&nbsp;                Student student = studentRepository.findById(student_id[i]).orElse(null);</b>
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;                for (int j = 0; j &lt; course_id.length; j++) {</b>
+<i>67</i>&nbsp;
+<b class="fc"><i>68</i>&nbsp;                    Enrollment enrollment = new Enrollment();</b>
+<b class="fc"><i>69</i>&nbsp;                    Course course = courseRepository.findById(Long.valueOf(course_id[j])).orElse(null);</b>
+<i>70</i>&nbsp;
+<b class="fc"><i>71</i>&nbsp;                    enrollment.setClass_(class_);</b>
+<b class="fc"><i>72</i>&nbsp;                    enrollment.setDateT(new Date());</b>
+<b class="fc"><i>73</i>&nbsp;                    if (student == null) {</b>
+<b class="fc"><i>74</i>&nbsp;                        continue;</b>
+<i>75</i>&nbsp;                    }
+<b class="fc"><i>76</i>&nbsp;                    enrollment.setStudent(student);</b>
+<b class="fc"><i>77</i>&nbsp;                    if (course == null) {</b>
+<b class="fc"><i>78</i>&nbsp;                        continue;</b>
+<i>79</i>&nbsp;                    }
+<b class="fc"><i>80</i>&nbsp;                    enrollment.setCourse(course);</b>
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;                    try {
+<b class="fc"><i>83</i>&nbsp;                        enrollmentRepository.save(enrollment);</b>
+<b class="fc"><i>84</i>&nbsp;                    } catch (Exception e) {</b>
+<i>85</i>&nbsp;                        //already added
+<b class="nc"><i>86</i>&nbsp;                    }</b>
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;                }
+<i>89</i>&nbsp;
+<b class="fc"><i>90</i>&nbsp;                for (int x = 0; x &lt; trait.length; x++) {</b>
+<i>91</i>&nbsp;
+<b class="fc"><i>92</i>&nbsp;                    Assessment assessment = new Assessment();</b>
+<b class="fc"><i>93</i>&nbsp;                    assessment.setTrait(trait[x]);</b>
+<b class="fc"><i>94</i>&nbsp;                    assessment.setType(type[x]);</b>
+<b class="fc"><i>95</i>&nbsp;                    assessment.setRating(&quot;&quot;);</b>
+<b class="fc"><i>96</i>&nbsp;                    assessment.setStudent(student);</b>
+<b class="fc"><i>97</i>&nbsp;                    assessment.setClass_(class_);</b>
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;                    try {
+<b class="fc"><i>100</i>&nbsp;                        assessmentRepository.save(assessment);</b>
+<b class="fc"><i>101</i>&nbsp;                    } catch (Exception e) {</b>
+<i>102</i>&nbsp;                        //already added
+<b class="fc"><i>103</i>&nbsp;                    }</b>
+<i>104</i>&nbsp;                }
+<i>105</i>&nbsp;            }
+<i>106</i>&nbsp;
+<b class="fc"><i>107</i>&nbsp;        return ResponseEntity.ok(&quot;Enrolled!!!&quot;);</b>
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2018-11-04 21:25</div>
+</div>
+</body>
+</html>

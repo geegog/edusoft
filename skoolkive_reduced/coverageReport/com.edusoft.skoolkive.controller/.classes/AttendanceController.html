@@ -1,0 +1,173 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AttendanceController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.edusoft.skoolkive.controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AttendanceController (com.edusoft.skoolkive.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AttendanceController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (32/ 32)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.edusoft.skoolkive.controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.edusoft.skoolkive.entities.Attendance;
+<i>4</i>&nbsp;import com.edusoft.skoolkive.entities.Class_;
+<i>5</i>&nbsp;import com.edusoft.skoolkive.entities.Student;
+<i>6</i>&nbsp;import com.edusoft.skoolkive.enums.Status;
+<i>7</i>&nbsp;import com.edusoft.skoolkive.pojo.AttendanceDto;
+<i>8</i>&nbsp;import com.edusoft.skoolkive.repository.AttendanceRepository;
+<i>9</i>&nbsp;import com.edusoft.skoolkive.repository.ClassRepository;
+<i>10</i>&nbsp;import com.edusoft.skoolkive.repository.StudentRepository;
+<i>11</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>12</i>&nbsp;import org.springframework.http.HttpStatus;
+<i>13</i>&nbsp;import org.springframework.http.ResponseEntity;
+<i>14</i>&nbsp;import org.springframework.web.bind.annotation.PostMapping;
+<i>15</i>&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+<i>16</i>&nbsp;import org.springframework.web.bind.annotation.RestController;
+<i>17</i>&nbsp;import javax.servlet.http.HttpSession;
+<i>18</i>&nbsp;import java.text.SimpleDateFormat;
+<i>19</i>&nbsp;import java.util.Date;
+<i>20</i>&nbsp;import java.util.List;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * Created by Mahdad-PC on 11/4/2018.
+<i>24</i>&nbsp; */
+<i>25</i>&nbsp;@RestController
+<b class="fc"><i>26</i>&nbsp;public class AttendanceController {</b>
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;        @Autowired
+<i>29</i>&nbsp;        StudentRepository studentRepository;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;        @Autowired
+<i>32</i>&nbsp;        ClassRepository classRepository;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;        @Autowired
+<i>35</i>&nbsp;        AttendanceRepository attendanceRepository;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;        @PostMapping(&quot;api/take/attendance&quot;)
+<i>38</i>&nbsp;        public ResponseEntity&lt;String&gt; recordAttendance(@RequestBody AttendanceDto form, HttpSession session){
+<i>39</i>&nbsp;            try {
+<i>40</i>&nbsp;
+<b class="fc"><i>41</i>&nbsp;                if (form.getClass_id() == null)</b>
+<b class="fc"><i>42</i>&nbsp;                    return ResponseEntity.badRequest().build();</b>
+<i>43</i>&nbsp;
+<b class="fc"><i>44</i>&nbsp;                if (form.getStudents() == null)</b>
+<b class="fc"><i>45</i>&nbsp;                    return ResponseEntity.badRequest().build();</b>
+<i>46</i>&nbsp;
+<b class="fc"><i>47</i>&nbsp;                if (form.getStatus() == null)</b>
+<b class="fc"><i>48</i>&nbsp;                    return ResponseEntity.badRequest().build();</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;
+<b class="fc"><i>52</i>&nbsp;                String[] status = form.getStatus();</b>
+<b class="fc"><i>53</i>&nbsp;                Long[] student_id = form.getStudents();</b>
+<b class="fc"><i>54</i>&nbsp;                Long classId = form.getClass_id();</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;
+<b class="fc"><i>58</i>&nbsp;                for (int i = 0; i &lt; student_id.length; i++) {</b>
+<i>59</i>&nbsp;
+<b class="fc"><i>60</i>&nbsp;                    Long id = Long.parseLong(String.valueOf(student_id[i]));</b>
+<b class="fc"><i>61</i>&nbsp;                    Student student = studentRepository.findById(id).get();</b>
+<i>62</i>&nbsp;
+<b class="fc"><i>63</i>&nbsp;                    Long class_id = Long.parseLong(String.valueOf(classId));</b>
+<b class="fc"><i>64</i>&nbsp;                    Class_ class_ = classRepository.findById(class_id).get();</b>
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;                    Attendance attendance = new Attendance();</b>
+<b class="fc"><i>67</i>&nbsp;                    attendance.setStudent(student);</b>
+<b class="fc"><i>68</i>&nbsp;                    attendance.setStatus(Status.valueOf(status[i]));</b>
+<b class="fc"><i>69</i>&nbsp;                    attendance.setClass_(class_);</b>
+<b class="fc"><i>70</i>&nbsp;                    attendance.setDateT(new Date());</b>
+<b class="fc"><i>71</i>&nbsp;                    SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd&quot;);</b>
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;                    List&lt;Attendance&gt; attendanceList = attendanceRepository.findAll();</b>
+<b class="fc"><i>74</i>&nbsp;                    for(Attendance savedAttendance : attendanceList) {</b>
+<b class="fc"><i>75</i>&nbsp;                        if(savedAttendance.getStudent().equals(attendance.getStudent()) &amp;&amp;</b>
+<b class="fc"><i>76</i>&nbsp;                                savedAttendance.getClass_().equals(attendance.getClass_()) &amp;&amp; (</b>
+<b class="fc"><i>77</i>&nbsp;                                sdf.parse(sdf.format(attendance.getDateT())).equals(savedAttendance.getDateT()))){</b>
+<b class="fc"><i>78</i>&nbsp;                            return ResponseEntity.ok(&quot;Attendance exist you should go for update it&quot;);</b>
+<i>79</i>&nbsp;                        }
+<b class="fc"><i>80</i>&nbsp;                    }</b>
+<i>81</i>&nbsp;
+<b class="fc"><i>82</i>&nbsp;                    attendanceRepository.save(attendance);</b>
+<i>83</i>&nbsp;                }
+<b class="fc"><i>84</i>&nbsp;                return ResponseEntity.ok(&quot;Attendance has been recorded successful...&quot;);</b>
+<b class="fc"><i>85</i>&nbsp;            } catch (Exception e){</b>
+<b class="fc"><i>86</i>&nbsp;                return new ResponseEntity&lt;&gt;</b>
+<i>87</i>&nbsp;                        (HttpStatus.INTERNAL_SERVER_ERROR);
+<i>88</i>&nbsp;            }
+<i>89</i>&nbsp;        }
+<i>90</i>&nbsp;    }
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2018-11-04 21:25</div>
+</div>
+</body>
+</html>
