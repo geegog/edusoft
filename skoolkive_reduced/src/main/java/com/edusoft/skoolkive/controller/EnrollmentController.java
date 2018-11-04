@@ -18,10 +18,13 @@ public class EnrollmentController {
 
     @PostMapping("api/enroll")
     public ResponseEntity<String> enrollmentStudents(@RequestBody EnrollmentDto form) {
-        try {
+
             //testEnrollStudentNoClassSupplied
             if (form.getClass_id() == null) return ResponseEntity.badRequest().build();
 
+            //testEnrollStudentNoCoursesSupplied
+            if (form.getCourses() == null) return ResponseEntity.badRequest().build();
+        try {
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
