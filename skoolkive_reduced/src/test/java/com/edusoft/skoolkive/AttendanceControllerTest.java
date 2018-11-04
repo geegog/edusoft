@@ -45,4 +45,33 @@ public class AttendanceControllerTest {
 
         Assert.assertEquals(200, response.getStatusCode().value());
     }
+
+    @Test
+    public void testAttendanceWithoutStatus() throws Exception {
+        HttpEntity<Object> attendanceObjectHttpEntity = getHttpEntity(
+                "{\n" +
+                        "  \"students\": [1,2],\n" +
+                        "  \"class_id\": 1\n" +
+                        "}");
+
+        ResponseEntity<String> response = template.postForEntity(
+                "/api/take/attendance", attendanceObjectHttpEntity, String.class);
+
+        Assert.assertEquals(400, response.getStatusCode().value());
+    }
+
+    @Test
+    public void testAttendanceWithoutStudent() throws Exception {
+        HttpEntity<Object> attendanceObjectHttpEntity = getHttpEntity(
+                "{\n" +
+                        "  \"class_id\": 1\n" +
+                        "  \"status\": [\"LATE\"]\n"+
+                        "}");
+
+        ResponseEntity<String> response = template.postForEntity(
+                "/api/take/attendance", attendanceObjectHttpEntity, String.class);
+
+        Assert.assertEquals(400, response.getStatusCode().value());
+    }
+
 }
