@@ -75,6 +75,21 @@ public class AttendanceControllerTest {
     }
 
     @Test
+    public void testAttendanceFailureWithBadDataForStudent() throws Exception {
+        HttpEntity<Object> attendanceObjectHttpEntity = getHttpEntity(
+                "{\n" +
+                        "  \"students\": [10],\n" +
+                        "  \"class_id\": 1,\n" +
+                        "  \"status\": [\"EXCUSED\"]\n"+
+                        "}");
+
+        ResponseEntity<String> response = template.postForEntity(
+                "/api/take/attendance", attendanceObjectHttpEntity, String.class);
+
+        Assert.assertEquals(500, response.getStatusCode().value());
+    }
+
+    @Test
     public void testAttendanceWithoutClass() throws Exception {
         HttpEntity<Object> attendanceObjectHttpEntity = getHttpEntity(
                 "{\n" +
