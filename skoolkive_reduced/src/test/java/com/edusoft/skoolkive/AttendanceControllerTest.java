@@ -109,6 +109,20 @@ public class AttendanceControllerTest {
     }
 
     @Test
+    public void testAttendanceWithStudentNull() throws Exception {
+        HttpEntity<Object> attendanceObjectHttpEntity = getHttpEntity(
+                "{\n" +
+                        
+                        "  \"class_id\": 1\n" +
+                        "}");
+
+        ResponseEntity<String> response = template.postForEntity(
+                "/api/take/attendance", attendanceObjectHttpEntity, String.class);
+
+        Assert.assertEquals(400, response.getStatusCode().value());
+    }
+
+    @Test
     public void testAttendanceWithoutClass() throws Exception {
         HttpEntity<Object> attendanceObjectHttpEntity = getHttpEntity(
                 "{\n" +
