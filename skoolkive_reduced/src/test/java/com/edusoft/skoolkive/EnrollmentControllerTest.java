@@ -100,8 +100,24 @@ public class EnrollmentControllerTest {
         ResponseEntity<String> response = template.postForEntity(
                 "/api/enroll", enroll, String.class);
 
-        Assert.assertNull(response.getBody());
-        Assert.assertEquals(500, response.getStatusCode().value());
+        Assert.assertEquals("Enrolled!!!", response.getBody());
+        Assert.assertEquals(200, response.getStatusCode().value());
+    }
+
+    @Test
+    public void testEnrollStudentNotExistingCourses() throws Exception {
+        HttpEntity<Object> enroll = getHttpEntity(
+                "{\n" +
+                        "  \"students\": [1,2],\n" +
+                        "  \"courses\": [1,2,3,4,5,6,7,8,9],\n" +
+                        "  \"class_id\": 1\n" +
+                        "}");
+
+        ResponseEntity<String> response = template.postForEntity(
+                "/api/enroll", enroll, String.class);
+
+        Assert.assertEquals("Enrolled!!!", response.getBody());
+        Assert.assertEquals(200, response.getStatusCode().value());
     }
 
 
