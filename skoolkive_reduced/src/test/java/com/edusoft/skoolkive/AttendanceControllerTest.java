@@ -65,6 +65,7 @@ public class AttendanceControllerTest {
         HttpEntity<Object> attendanceObjectHttpEntity = getHttpEntity(
                 "{\n" +
                         "  \"class_id\": 1\n" +
+                        "  \"status\": [\"LATE\"]\n"+
                         "}");
 
         ResponseEntity<String> response = template.postForEntity(
